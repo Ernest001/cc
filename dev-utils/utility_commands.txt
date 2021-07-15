@@ -1,0 +1,26 @@
+sed -e "s/^WARC(.*)$/\\&#39;/g" -e 's/\\"\\"\\[\\]//g' -e "" -e "s/\\\\\\/\\&#92;/g" -e '1i\\\\' $file > $file.sed
+
+sed -e 's/^WARC.*//' -e 's/^Content-Type.*//' -e 's/^Content-Length.*//' -e 's/^Software-Info.*//' -e 's/^Extracted-Date.*//' -e 's/^ip.*//' -e 's/^hostname.*//' -e 's/^format.*//' -e 's/^conformsTo.*//' -e 's/}}}/}}},/' -e 's/^\s$//' CC-MAIN-20210505203909-20210505233909-00017.warc.wat > out.sed && awk 'NF' out.sed > out.awk
+
+sed -e 's/^WARC.*//' -e 's/^Content-Type.*//' -e 's/^Content-Length.*//' -e 's/^Software-Info.*//' -e 's/^Extracted-Date.*//' -e 's/^ip.*//' -e 's/^hostname.*//' -e 's/^format.*//' -e 's/^conformsTo.*//' -e 's/}}}/}}},/' -e 's/^\s$//' CC-MAIN-20210505203909-20210505233909-00017.warc.wat.head > out.sed && awk 'NF' out.sed > out.awk && truncate -s-3 out.awk && tail -n 1 out.awk
+
+
+Software-Info: ia-web-commons.1.1.10-SNAPSHOT-20210502051033
+Extracted-Date: Wed, 19 May 2021 06:57:10 GMT
+ip: 10.67.67.196
+hostname: ip-10-67-67-196.ec2.internal
+format: WARC File Format 1.0
+conformsTo: http://bibnum.bnf.fr/WARC/WARC_ISO_28500_version1_latestdraft.pdf
+
+echo "" > CC-MAIN-20210505203909-20210505233909-00017.warc.wat.head &&
+ tail -n 20000 CC-MAIN-20210505203909-20210505233909-00017.warc.wat > CC-MAIN-20210505203909-20210505233909-00017.warc.wat.head &&
+ sed -e 's/^WARC.*//' -e 's/^Content-Type.*//' -e 's/^Content-Length.*//' -e 's/^Software-Info.*//' -e 's/^Extracted-Date.*//' -e 's/^ip.*//' -e 's/^hostname.*//' -e 's/^format.*//' -e 's/^conformsTo.*//' CC-MAIN-20210505203909-20210505233909-00017.warc.wat.head > out.sed &&
+ awk 'NF' out.sed > out.awk
+
+
+
+sed -e 's/^WARC.*//' -e 's/^Content-Type.*//' -e 's/^Content-Length.*//' -e 's/^Software-Info.*//' -e 's/^Extracted-Date.*//' -e 's/^ip.*//' -e 's/^hostname.*//' -e 's/^format.*//' -e 's/^conformsTo.*//' -e 's/}}}/}}},/' -e 's/^\s$//' CC-MAIN-20210505203909-20210505233909-00017.warc.wat.head > out.sed && 
+awk 'NF' out.sed > out.awk
+
+printf '%s\n%s\n' "{"items": [" "$(cat out.json)" > text.txt
+

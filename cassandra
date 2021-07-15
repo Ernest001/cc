@@ -1,0 +1,119 @@
+CREATE KEYSPACE cc_urls
+WITH REPLICATION = { 
+  'class' : 'NetworkTopologyStrategy', 
+  'Mars' : 1
+};
+
+
+"LatD", "LatM", "LatS", "NS", "LonD", "LonM", "LonS", "EW", "City", "State"
+create table raw_data (
+loc_id text,
+language text,
+keyword text,
+type text,
+date_time text,
+position text,
+url text,
+title text,
+snippet text,
+snippet_extra text,
+results_count text,
+etv text,
+result_extra text,
+result_spell text,
+check_url text,
+kw_datetime text,
+kw_competition text,
+kw_cost_per_click text,
+kw_search_volume text,
+kw_history text,
+related text,
+kw_categories text,
+result_spell_type text,
+kw_monthly_impressions text,
+kw_monthly_impressions_etv text,
+kw_ads_pos1_cpc text,
+kw_ads_pos1_monthly_clicks text,
+kw_ads_pos1_monthly_cost text,
+clickstream_search_volume text,
+clickstream_etv text,
+clickstream_sv_history text,
+primary key (url)
+);
+
+
+CREATE TABLE cities (
+	latd text,
+	latm text,
+	lats text,
+	ns text,
+	lond text,
+	lonm text,
+	lons text,
+	ew text,
+	city text,
+	state text,
+	primary key (city, state)
+)
+
+copy geo.cities ("latd", "latm", "lats", "ns", "lond", "lonm", "lons", "ew", "city", "state") from '/overlord/cities.csv';
+
+copy geo.cities (loc_id, language, keyword, type, date_time, position, url, title, snippet, snippet_extra, results_count, etv, result_extra, result_spell, check_url, kw_datetime, kw_competition, kw_cost_per_click, kw_search_volume, kw_history, related, kw_categories, result_spell_type, kw_monthly_impressions, kw_monthly_impressions_etv, kw_ads_pos1_cpc, kw_ads_pos1_monthly_clicks, kw_ads_pos1_monthly_cost, clickstream_search_volume, clickstream_etv, clickstream_sv_history) from '/home/ernest/WORK/seochecker/resources/csvs/1.csv';
+
+ALTER KEYSPACE "geo" WITH REPLICATION =
+  { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+
+ALTER KEYSPACE "geo"
+WITH REPLICATION = { 
+  'class' : 'NetworkTopologyStrategy', 
+  'Mars' : 1
+};
+
+CREATE TABLE cities (
+	latd text,
+	latm text,
+	lats text,
+	ns text,
+	lond text,
+	lonm text,
+	lons text,
+	ew text,
+	city text,
+	state text,
+	primary key (city, state)
+)
+
+kafka-topics --create --topic json_topic --zookeeper zookeeper-server:2181 --partitions 3 --replication-factor 3
+kafka-topics --create --topic avro_topic --zookeeper zookeeper-server:2181 --partitions 3 --replication-factor 3
+
+
+curl -X POST -H "Content-Type: application/json" -d "@/etc/kafka-connect/connectors/conf/basic-connect.json" "http://localhost:8082/connectors"
+
+curl -X POST -H "Content-Type: application/json" -d "@/etc/kafka-connect/connectors/conf/avro-connect.json" "http://localhost:8082/connectors"
+
+
+curl -X GET "http://localhost:8082/connectors/cassandra-basic-sink/status"
+curl -X GET "http://localhost:8082/connectors/cassandra-avro-sink/status"
+
+cqlsh -e "CREATE TABLE connect.json_table (userid text PRIMARY KEY, username text, firstname text, lastname text);"
+
+kafka-avro-console-producer \
+--topic avro_topic \
+--broker-list kafka-server1:9092 \
+--property value.schema='{"type":"record","name":"user","fields":[{"name":"username","type":"string"},{"name":"firstname","type":"string"},{"name":"lastname","type":"string"}]}' \
+--property schema.registry.url=http://kafka-sr1:8081 < data.json
+
+
+echo '{"username": "fbar1", "firstname": "foo1", "lastname": "bar1"}' > data.json
+
+cqlsh -e "CREATE TABLE connect.json_table (userid text PRIMARY KEY, username text, firstname text, lastname text);"
+cqlsh -e "CREATE TABLE connect.avro_table (userid uuid PRIMARY KEY, username text, firstname text, lastname text);"
+
+
+
+kafka-avro-console-producer \
+--topic avro_topic \
+--broker-list kafka-server1:9092 \
+--property value.schema='{"type":"record","name":"user","fields":[{"name":"username","type":"string"},{"name":"firstname","type":"string"},{"name":"lastname","type":"string"}]}' \
+--property schema.registry.url=http://kafka-sr1:8081 < data.json
+

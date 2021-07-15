@@ -1,0 +1,9 @@
+LOAD DATA LOCAL INFILE '/home/ernest/common-crawl/some-hosts.csv' IGNORE INTO TABLE hosts_graph   LINES TERMINATED BY '\n' IGNORE 1 LINES (harmonicc_pos, harmonicc_val, pr_pos, pr_val, host_rev);--cc-main-2021-feb-apr-may-host-ranks.txt
+LOAD DATA LOCAL INFILE '/home/ernest/common-crawl/cc-main-2021-feb-apr-may-host-ranks.txt' IGNORE INTO TABLE hosts_graph   LINES TERMINATED BY '\n' IGNORE 1 LINES (harmonicc_pos, harmonicc_val, pr_pos, pr_val, host_rev);
+
+SELECT TABLE_NAME AS `Table`, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024) AS `Size (MB)` FROM information_schema.TABLES WHERE TABLE_SCHEMA = "common_crawl" AND TABLE_NAME = "hosts_graph" ORDER BY (DATA_LENGTH + INDEX_LENGTH) DESC
+
+ALTER TABLE hosts_graph add index idx_one (target_url_id, source_harmonic_centrality)
+ALTER TABLE hosts_graph add index idx_one (host_rev)
+
+#harmonicc_pos -> bigint  #harmonicc_val-> varchar(50)  #pr_pos->bignint #pr_val -> varchar(50) #host_rev -> varchar(256)
