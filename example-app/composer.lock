@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7759431e303e2d722a264a8a991a9e84",
+    "content-hash": "d14df9058e8c5a42d8465350a97bb440",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -860,6 +860,75 @@
                 "source": "https://github.com/guzzle/psr7/tree/2.0.0"
             },
             "time": "2021-06-30T20:03:07+00:00"
+        },
+        {
+            "name": "idealo/php-rdkafka-ffi",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/idealo/php-rdkafka-ffi.git",
+                "reference": "37249313f6c8b2cfa44a20f0234cc6fd74e843a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/idealo/php-rdkafka-ffi/zipball/37249313f6c8b2cfa44a20f0234cc6fd74e843a7",
+                "reference": "37249313f6c8b2cfa44a20f0234cc6fd74e843a7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ffi": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "conflict": {
+                "ext-rdkafka": "*"
+            },
+            "require-dev": {
+                "ircmaxell/php-c-parser": "dev-master",
+                "klitsche/dog": "^0.4",
+                "klitsche/ffigen": "^0.6",
+                "phpbench/phpbench": "dev-master",
+                "phpunit/phpunit": "^9.4",
+                "symfony/css-selector": "^5.1",
+                "symfony/dom-crawler": "^5.1",
+                "symplify/easy-coding-standard": "^8.1"
+            },
+            "suggest": {
+                "ext-pcntl": "*",
+                "ext-zend opcache": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "": "src/"
+                },
+                "files": [
+                    "src/constants.php",
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dirk Adler",
+                    "email": "dirk.adler@idealo.de"
+                }
+            ],
+            "description": "PHP Kafka client - binding librdkafka via FFI",
+            "keywords": [
+                "client",
+                "ffi",
+                "kafka",
+                "librdkafka",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/idealo/php-rdkafka-ffi/issues",
+                "source": "https://github.com/idealo/php-rdkafka-ffi/tree/v0.3.0"
+            },
+            "time": "2020-12-16T20:15:56+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7399,5 +7468,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
